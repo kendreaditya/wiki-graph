@@ -33,7 +33,7 @@ export async function getLinks(id) {
         pageids: id,
         generator: "links",
         format: "json",
-        gpllimit: "10"
+        gpllimit: "20"
     };
 
     let links_url = url + "?origin=*";

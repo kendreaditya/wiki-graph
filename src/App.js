@@ -9,36 +9,36 @@ function App() {
   const [renderedGraph, setRenderedGraph] = React.useState(null);
 
   function getGraph(articles) {
-    var root = new Node(value, [])
-    articles.map((article)=>{
-      getLinks(article.pageid).then(links => {
-          root.edges.push(new Node(article, links.map((link)=>{
-            return new Node(link, [])
-          })))
-        }
-      )
-    })
-    return root;
+    return new Node(value, articles.map(async (article)=>{
+      let links = await getLinks(article.pageid);
+      return (new Node(article, links.map((link)=>{
+        return new Node(link, [])
+      })))
+    }))
   }
 
   React.useEffect(()=> {
     if(value){
-      getLinks(value.pageid).then(res => {
-        let root = getGraph(res)
-        console.log(root)
-        console.log(root.edges.length)
+      getLinks(value.pageid).then(async (res) => {
+        let root = await getGraph(res)
+        console.log(root.edges)
 
         let graph = []
         graph.push(<ForceGraphNode node={{ id: root.info.title}} fill="red" />)
-        root.edges.forEach((edgeOne) => {
+        root.edges.forEach(async (edgeOne) => {
+          edgeOne = await edgeOne;
           graph.push(<ForceGraphNode node={{id: edgeOne.info.title}}/>)
-          graph.push(<ForceGraphLink link={{source: root.info.title, target: edgeOne.info.title}}/>)
+          // ph.push(<ForceGraphLink link={{source: root.info.title, target: edgeOne.info.title}}/>)
           edgeOne.edges.forEach((edgeTwo)=>{
             graph.push(<ForceGraphNode node={{id: edgeTwo.info.title}}/>)
             graph.push(<ForceGraphLink link={{source: edgeOne.info.title, target: edgeTwo.info.title}}/>)
           })
         })
+        console.log(graph)
+        await setTimeout(() => { console.log("World!");
         setRenderedGraph(graph)
+        
+      }, 2000);
         console.log(graph)
       }) 
     }
