@@ -1,8 +1,8 @@
-class Vertex {
-    constructor(info, edges) {
-        this.edges = edges;
-        this.info = info;
+class Graph {
+    constructor(nodes, links) {
+        this.nodes = nodes;
+        this.links = links;
     }
 }
 
-export default Vertex;
+export default Graph;
