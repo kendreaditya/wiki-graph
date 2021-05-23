@@ -1,5 +1,5 @@
 import React from 'react';
-import {InteractiveForceGraph, ForceGraphNode, ForceGraphLink} from 'react-vis-force';
+import {InteractiveForceGraph, ForceGraphNode, ForceGraphLink, set} from 'react-vis-force';
 import Graph from './components/graph';
 import {getLinks} from './components/api'
 import Search from "./components/search";
@@ -26,7 +26,7 @@ function App() {
         pageGraphLinks.push([link.title, page.title]);
       });
 
-      return (pageGraphNodes, pageGraphLinks);
+      return [pageGraphNodes, pageGraphLinks];
     };
 
     let pages = [rootPage];
@@ -34,34 +34,47 @@ function App() {
     for(var i=0; i<depth; i++){
       var depthPages = [];
 
-      pages.forEach((page)=>{
-        let [pageGraphNodes, pageGraphLinks] = _links(page);
-        depthPage = [...depthPages, ...pageGraphNodes.values()];
-        setNodes(new Map([...nodes, ...pageGraphNodes]));
-        setLinks([links, ...pageGraphLinks]);
+      await pages.forEach(async (page)=>{
+        let [pageGraphNodes, pageGraphLinks] = await _links(page);
+        depthPages = await [...depthPages, ...pageGraphNodes.values()];
+        // Automatically diregards 2nd instance of hash map
+        console.log(pageGraphNodes)
+        setNodes(await new Map([...nodes, ...pageGraphNodes]));
+        setLinks(await [links, ...pageGraphLinks]);
+        console.log(nodes)
+        console.log(links)
       })
-      pages = depthPages;
+
+      console.log(await depthPages)
+      pages = await depthPages;
     }
   }
 
-
-  React.useEffect(() => {value ? {
-    getAllLinks(value, depth=1)
-  } : null}, [value])
-
-  React.useEffect(()=> {
+  const updateGraph = async () => {
+    // Divide links and nodes + don't rerender everything everything (figure out whats newly added)
     let graph = []
-    graph.push(<ForceGraphNode node={{ id: root.info.title}} fill="red" />)
-    root.edges.forEach(async (edgeOne) => {
-      edgeOne = await edgeOne;
-      graph.push(<ForceGraphNode node={{id: edgeOne.info.title}}/>)
-      // ph.push(<ForceGraphLink link={{source: root.info.title, target: edgeOne.info.title}}/>)
-      edgeOne.edges.forEach((edgeTwo)=>{
-        graph.push(<ForceGraphNode node={{id: edgeTwo.info.title}}/>)
-        graph.push(<ForceGraphLink link={{source: edgeOne.info.title, target: edgeTwo.info.title}}/>)
-      })
+  
+    graph.push(<ForceGraphNode node={{ id: value.title}} fill="red" />)
+
+    nodes.forEach(async (edge) => {
+      graph.push(<ForceGraphNode node={{id: edge.title}}/>)
     })
-  }, [links, nodes])
+  
+    links.forEach((link) => {
+      // fix by checking .length===0
+      if(link[0])
+        graph.push(<ForceGraphLink link={{source: link[0], target: link[1]}}/>)
+    })
+
+    await setTimeout(function(){
+      setRenderedGraph(graph)
+    }, 3000);
+  }  
+
+
+  React.useEffect(() => (value ? getAllLinks(value, 2) : null), [value])
+
+  React.useEffect(()=> ( value ? updateGraph() : null), [links, nodes])
 
 
   return (
