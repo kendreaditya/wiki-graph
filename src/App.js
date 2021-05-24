@@ -12,7 +12,7 @@ function App() {
   const [value, setValue] = React.useState(null)
   const [renderedGraph, setRenderedGraph] = React.useState([]);
   var allNodes = new Map();
-
+  
   const renderGraph = async (nodes, links) => {
     let graphNodes = await nodes.reduce((result, edge) => {
       if(!allNodes.has(edge.title)){
@@ -21,11 +21,11 @@ function App() {
       } 
       return result
     }, []);
-
+    
     let graphLinks = await links.map((link)=>{
       return <ForceGraphLink link={{source: link[0], target: link[1]}}/>
     })  
-
+    
     setRenderedGraph(renderedGraph => {
       // the line below eliminates the need to rerender by pressing enter twice, but causes a distored graph
       // renderedGraph.length!==0 ? setRenderedGraph([...renderedGraph, ...graphNodes, ...graphLinks]) : setRenderedGraph([<ForceGraphNode node={{ id: value.title}} fill="red" />, ...graphNodes, ...graphLinks]);
@@ -65,7 +65,6 @@ function App() {
   }
 
   React.useEffect(() => (value ? getAllLinks(value, 2) : null), [value]);
-  React.useEffect(()=> console.log(renderedGraph), [renderedGraph]);
 
   return (
     <div>
