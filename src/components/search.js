@@ -36,7 +36,7 @@ export default function Search({setValue}) {
         style={{ width: 300 }}
         freeSolo
         renderInput={(params) => (
-            <TextField {...params} label="wikipedia article" variant="outlined" onChange={(event)=>setSearchTerm(event.target.value)}/>
+            <TextField autoFocus {...params} label="wikipedia article" variant="outlined" onChange={(event)=>setSearchTerm(event.target.value)}/>
         )}
         />
     );
