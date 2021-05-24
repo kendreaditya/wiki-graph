@@ -26,14 +26,10 @@ function App() {
       return <ForceGraphLink link={{source: link[0], target: link[1]}}/>
     })  
 
-    // renderedGraph.length!==0 ? setRenderedGraph([...renderedGraph, ...graphNodes, ...graphLinks]) : setRenderedGraph([<ForceGraphNode node={{ id: value.title}} fill="red" />, ...graphNodes, ...graphLinks]);
-
-    // renderedGraph.length!==0 ? renderedGraph.push(...graphNodes, ...graphLinks) : renderedGraph.push(<ForceGraphNode node={{ id: value.title}} fill="red" />, ...graphNodes, ...graphLinks);  
-    // setRenderedGraph(renderedGraph);
-
     setRenderedGraph(renderedGraph => {
-      renderedGraph.length!==0 ? setRenderedGraph([...renderedGraph, ...graphNodes, ...graphLinks]) : setRenderedGraph([<ForceGraphNode node={{ id: value.title}} fill="red" />, ...graphNodes, ...graphLinks]);
-      // renderedGraph.length!==0 ? renderedGraph.push(...graphNodes, ...graphLinks) : renderedGraph.push(<ForceGraphNode node={{ id: value.title}} fill="red" />, ...graphNodes, ...graphLinks);  
+      // the line below eliminates the need to rerender by pressing enter twice, but causes a distored graph
+      // renderedGraph.length!==0 ? setRenderedGraph([...renderedGraph, ...graphNodes, ...graphLinks]) : setRenderedGraph([<ForceGraphNode node={{ id: value.title}} fill="red" />, ...graphNodes, ...graphLinks]);
+      renderedGraph.length!==0 ? renderedGraph.push(...graphNodes, ...graphLinks) : renderedGraph.push(<ForceGraphNode node={{ id: value.title}} fill="red" />, ...graphNodes, ...graphLinks);  
       return renderedGraph;
     });
   };
