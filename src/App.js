@@ -3,7 +3,6 @@ import {InteractiveForceGraph, ForceGraphNode, ForceGraphLink} from 'react-vis-f
 import Graph from './components/graph';
 import {getLinks} from './components/api'
 import Search from "./components/search";
-import { render } from '@testing-library/react';
 
 // render as more responces come in
 // add ability to add and remove nodes -> search list materail ui list
@@ -11,23 +10,26 @@ import { render } from '@testing-library/react';
 
 function App() {
   const [value, setValue] = React.useState(null)
-  const [renderedGraph, setRenderedGraph] = React.useState(null);
+  const [renderedGraph, setRenderedGraph] = React.useState([]);
+  var allNodes = new Map();
 
-  const renderGraphNodes = (nodes) => {
-    let graphNodes = Array.from(nodes).map(([title, edge])=>{
+  const renderGraph = async (nodes, links) => {
+    let graphNodes = await Array.from(nodes).map(([title, edge])=>{
+      // check if node is already rendered ~ via allNodes, but the thing is this fucntion is a map and can't pass/continue, and if you try forEach then you get problems with skiping code
       return <ForceGraphNode node={{id: title}}/>
     })
-    console.log(graphNodes);
-    renderedGraph ? setRenderedGraph([...renderedGraph, ...graphNodes]) : setRenderedGraph([...graphNodes]);  
-  };
 
-  const renderGraphLinks = (links) => {
-    let graphLinks = links.map((link)=>{
+    let graphLinks = await links.map((link)=>{
       // fix by checking .length===0
-      console.log(link[0], link[1])
       return <ForceGraphLink link={{source: link[0], target: link[1]}}/>
-    })
-    renderedGraph ? setRenderedGraph([...renderedGraph, ...graphLinks]) : setRenderedGraph([...graphLinks]);  
+    })  
+
+    // renderedGraph.length!==0 ? setRenderedGraph([...renderedGraph, ...graphNodes, ...graphLinks]) : setRenderedGraph([<ForceGraphNode node={{ id: value.title}} fill="red" />, ...graphNodes, ...graphLinks]);  
+    // renderedGraph.length!==0 ? setRenderedGraph([...renderedGraph, ...graphNodes]) : setRenderedGraph([<ForceGraphNode node={{ id: value.title}} fill="red" />, ...graphNodes]);  
+    // renderedGraph.length!==0 ? renderedGraph.push(...graphNodes) : renderedGraph.push(<ForceGraphNode node={{ id: value.title}} fill="red" />, ...graphNodes);  
+    renderedGraph.length!==0 ? renderedGraph.push(...graphNodes, ...graphLinks) : renderedGraph.push(<ForceGraphNode node={{ id: value.title}} fill="red" />, ...graphNodes, ...graphLinks);  
+    setRenderedGraph(renderedGraph);
+    console.log(renderedGraph)
   };
 
 // await setTimeout(function(){
@@ -50,27 +52,22 @@ function App() {
     };
 
     let pages = [rootPage];
-    setRenderedGraph([<ForceGraphNode node={{ id: value.title}} fill="red" />]);
 
     for(var i=0; i<depth; i++){
-      var depthPages = [];
-      
-      await pages.forEach(async (page)=>{
+     
+      pages = await pages
+      pages = pages.map(async (page)=>{
+        page = await page 
+        console.log(await page)
         let [pageGraphNodes, pageGraphLinks] = await _links(page);
-
-        renderGraphNodes(pageGraphNodes);
-        renderGraphLinks(pageGraphLinks);
-
-        depthPages = await [...depthPages, ...pageGraphNodes.values()];
-        // Automatically diregards 2nd instance of hash map
-      })
-
-      pages = await depthPages;
+        renderGraph(pageGraphNodes, pageGraphLinks);
+        return await Array.from(await pageGraphNodes.values());
+      })[0]
     }
   }
 
 
-  React.useEffect(() => (value ? getAllLinks(value, 1) : null), [value]);
+  React.useEffect(() => (value ? getAllLinks(value, 2) : null), [value]);
   React.useEffect(()=> console.log(renderedGraph), [renderedGraph]);
 
 
@@ -80,7 +77,7 @@ function App() {
       <div className="search-bar">
         <Search setValue={setValue}/>
       </div>
-      {renderedGraph ?
+      {renderedGraph.length!==0 ?
       <InteractiveForceGraph>
         {renderedGraph}
       </InteractiveForceGraph>
