@@ -10,6 +10,7 @@ import Search from "./components/search";
 
 function App() {
   const [value, setValue] = React.useState(null)
+  const [depth, setDepth] = React.useState(2)
   const [renderedGraph, setRenderedGraph] = React.useState([]);
   var allNodes = new Map();
   
@@ -64,12 +65,12 @@ function App() {
     }
   }
 
-  React.useEffect(() => (value ? getAllLinks(value, 2) : null), [value]);
+  React.useEffect(() => (value ? getAllLinks(value, depth) : null), [value]);
 
   return (
     <div>
       <div className="search-bar">
-        <Search setValue={setValue}/>
+        <Search setValue={setValue} setDepth={setDepth}/>
       </div>
       {renderedGraph.length!==0 ?
       <InteractiveForceGraph>

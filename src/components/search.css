@@ -1,0 +1,13 @@
+#tool-bar {
+  display: flex;
+}
+
+#search-bar {
+  flex: 1;
+  margin: 10px;
+}
+
+#depth-feild {
+  flex: 1;
+  margin: 10px;
+}
