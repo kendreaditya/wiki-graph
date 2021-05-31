@@ -4,13 +4,14 @@
 Wiki Graph is a graph-based interface for reseraching articles and finding realted topics.
 </p>
 
-# Table of Contents
+# 📝 Table of Contents
 
 - [Architecture](#architecture)
+- [Work to be done](#todo)
 - [Usage](#usage)
 - [Contributing](#contributing)
 
-# Architecture
+# 🏗️ Architecture
 
 - Rect.js
   - Fast component/UI updates
@@ -21,7 +22,19 @@ Wiki Graph is a graph-based interface for reseraching articles and finding realt
 - Fetch
   - Native & Promises
 
-# Usage
+# 💡 Work to be done
+- Fix depth lag
+- Add size based on connections 
+- Add color based on root node
+- Add updated poping animation based on rendering graph
+- Add ability to add and remove nodes -> search list materail ui list
+- Add ability to click on on node an take to wiki page
+- Add ability to preview wikipage when hovering
+- Add ability to change different topic
+- Render as more responces come in -> dont' think thats possible
+- Add ML agorhtims for sorting via sentamet/attention/relativeness
+
+# ✍️ Usage
 
 ### `npm start`
 
@@ -53,7 +66,7 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-# Contributing
+# 🤗 Contributing
 
 Feel free to contribute by making a pull request.
 The MIT License (MIT)
