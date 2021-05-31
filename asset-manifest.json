@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/wiki-graph/static/css/main.d62602a9.chunk.css",
+    "main.js": "/wiki-graph/static/js/main.bb251380.chunk.js",
+    "main.js.map": "/wiki-graph/static/js/main.bb251380.chunk.js.map",
+    "runtime-main.js": "/wiki-graph/static/js/runtime-main.ffea5720.js",
+    "runtime-main.js.map": "/wiki-graph/static/js/runtime-main.ffea5720.js.map",
+    "static/js/2.d94be0fa.chunk.js": "/wiki-graph/static/js/2.d94be0fa.chunk.js",
+    "static/js/2.d94be0fa.chunk.js.map": "/wiki-graph/static/js/2.d94be0fa.chunk.js.map",
+    "index.html": "/wiki-graph/index.html",
+    "static/css/main.d62602a9.chunk.css.map": "/wiki-graph/static/css/main.d62602a9.chunk.css.map",
+    "static/js/2.d94be0fa.chunk.js.LICENSE.txt": "/wiki-graph/static/js/2.d94be0fa.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ffea5720.js",
+    "static/js/2.d94be0fa.chunk.js",
+    "static/css/main.d62602a9.chunk.css",
+    "static/js/main.bb251380.chunk.js"
+  ]
+}
