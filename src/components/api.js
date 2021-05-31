@@ -1,4 +1,5 @@
 var url = "https://en.wikipedia.org/w/api.php"; 
+export var pageURL = "https://en.m.wikipedia.org/wiki";
 
 export const search = (term) => {
     let params = {
@@ -33,7 +34,8 @@ export async function getLinks(id) {
         pageids: id,
         generator: "links",
         format: "json",
-        gpllimit: "20"
+        gpllimit: "20",
+        inprop: "url"
     };
 
     let links_url = url + "?origin=*";

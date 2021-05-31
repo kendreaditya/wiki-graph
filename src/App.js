@@ -3,22 +3,32 @@ import {InteractiveForceGraph, ForceGraphNode, ForceGraphLink} from 'react-vis-f
 import Graph from './components/graph';
 import {getLinks} from './components/api'
 import Search from "./components/search";
+import Preview from './components/preview';
+import './App.css';
 
-// render as more responces come in
+// fix depth lag
+// add size based on connections 
+// add color based on root node
+// add updated poping animation based on rendering graph
 // add ability to add and remove nodes -> search list materail ui list
-// add algorhtims to choose nodes -> number of nodes to render
+// add ability to click on on node an take to wiki page
+// add ability to preview wikipage when hovering
+// add ability to change different topic
+// render as more responces come in -> dont' think thats possible
+// add ML agorhtims for sorting via sentamet/attention/relativeness
 
 function App() {
   const [value, setValue] = React.useState(null)
   const [depth, setDepth] = React.useState(2)
   const [renderedGraph, setRenderedGraph] = React.useState([]);
+  const [selectedNode, setSelectedNode] = React.useState(null);
   var allNodes = new Map();
   
   const renderGraph = async (nodes, links) => {
     let graphNodes = await nodes.reduce((result, edge) => {
       if(!allNodes.has(edge.title)){
         allNodes.set(edge.title, edge)
-        result.push(<ForceGraphNode node={{id: edge.title}}/>)
+        result.push(<ForceGraphNode node={{id: edge.title, pageid: edge.pageid}} />)
       } 
       return result
     }, []);
@@ -34,6 +44,11 @@ function App() {
       return renderedGraph;
     });
   };
+
+  const setGraphData = (value, depth) => {
+    setValue(value)
+    setDepth(depth)
+  }
 
   const getAllLinks = async (rootPage, depth) => {
     const _links = async (page) => {
@@ -70,13 +85,20 @@ function App() {
   return (
     <div>
       <div className="search-bar">
-        <Search setValue={setValue} setDepth={setDepth}/>
+        <Search setGraphData={setGraphData}/>
       </div>
-      {renderedGraph.length!==0 ?
-      <InteractiveForceGraph>
-        {renderedGraph}
-      </InteractiveForceGraph>
-      : console.log("Graph not rendered")}
+      <div id="graph-information" style={{textAlign: "center"}}>
+        {selectedNode ? <Preview node={selectedNode} /> : null}
+        {renderedGraph.length!==0 ?
+        <InteractiveForceGraph
+        onSelectNode={(event, node) => setSelectedNode(node)}
+        simulationOptions={{ animate: true }}
+        
+        >
+          {renderedGraph}
+        </InteractiveForceGraph>
+        : console.log("Graph not rendered")}
+      </div>
     </div>
   );
 }

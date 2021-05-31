@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import {search} from './api'
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import './search.css'
 
-export default function Search({setValue, setDepth}) {
-    let value = null;
+export default function Search({setGraphData}) {
+    var value = null;
+    var depth = null;
     const [searchTerm, setSearchTerm] = React.useState(null);
     const [articles, setArticles] = React.useState([]);
 
@@ -16,17 +18,15 @@ export default function Search({setValue, setDepth}) {
     }, [searchTerm])
 
     return (
-        <div id="tool-bar">
-            <div id="search-bar">
+        <ul id="tool-bar">
+            <li id="search-bar">
                 <Autocomplete
                     value={value}
                     onChange={(event, newValue) => {
                         if (typeof newValue === 'string') {
-                        setValue({
-                            title: newValue,
-                        });
+                            value = newValue;
                         } else {
-                        setValue(newValue);
+                            value = newValue;
                         }
                     }}
                     options={articles}
@@ -42,10 +42,15 @@ export default function Search({setValue, setDepth}) {
                         <TextField autoFocus {...params} label="wikipedia article" variant="outlined" onChange={(event)=>setSearchTerm(event.target.value)}/>
                     )}
                 />
-            </div>
-            <div id="depth-feild">
-                <TextField label="depth" variant="outlined" onChange={(event)=>setDepth(event.target.value)} style={{maxWidth: 74}}/>
-            </div>
-        </div>
+            </li>
+            <li id="depth-feild">
+                <TextField id="depth-text-field" label="depth" variant="outlined" onChange={(event)=>depth = event.target.value} style={{maxWidth: 74}}/>
+            </li>
+            <li>
+                <Button id="render-button" variant="outlined" onClick={()=>setGraphData(value, depth)}>
+                    Render
+                </Button>
+            </li>
+        </ul>
     );
 }
