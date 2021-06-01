@@ -1,7 +1,7 @@
 <p align="center"><img src="src\assets\logo.svg" width="175" title="Wiki Graph Logo"><h1></h1></p>
 
 <p align="center">
-Wiki Graph is a graph-based interface for reseraching articles and finding realted topics.
+Wiki Graph is a graph-based interface for reseraching articles and finding realted topics. [Try it here!](https://kendreaditya.github.io/wiki-graph/)
 </p>
 
 # 📝 Table of Contents
